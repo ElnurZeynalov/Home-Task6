@@ -9,7 +9,7 @@ namespace ConsoleApp1
             #region FirstOperation
             Console.WriteLine("Sisteme nece eded kitab daxil edeceksiniz?");
             int Quantity = GetInfoInt("Kitablarin sayini daxil edin: ", 0, int.MaxValue);
-            Book[] books = new Book[Quantity];
+            Book[] Books = new Book[Quantity];
             for (int i = 0; i < Quantity; i++)
             {
                 Console.WriteLine("\n---------------------------\n" + $"{i + 1} Kitabin melumatlari" + "\n---------------------------\n");
@@ -18,7 +18,7 @@ namespace ConsoleApp1
                 string name = GetInfoString("Kitabin adini daxil edin: ", 2, 30);
                 int count = GetInfoInt("Kitabin sayini daxil edin: ", 0, int.MaxValue);
                 double price = GetInfoDouble("Kitabin qiymetini daxil edin: ", 0.2, 200);
-                Book Books = new Book(no, name, price, genere)
+                Books[i] = new Book(no, name, price, genere)
                 {
                     Count = count,
                     Name = name,
@@ -26,38 +26,35 @@ namespace ConsoleApp1
                     Genre = genere,
                     No = no,
                 };
-                books[i] = Books;
             }
             #endregion
             #region Selection part
-            Console.WriteLine("\n===============================\n1. Kitablari qiymete gore filterle\n2.Kitablar icinde axtaris" +
+            Console.WriteLine("\n===============================\n1.Kitablari qiymete gore filterle\n2.Kitablar icinde axtaris" +
                 "\n3.Butun kitablari goster\n4.Proqrami bagla\n===============================\n");
             int Choose = GetInfoInt("Reqemi daxil edin: ", 0, 5);
             switch (Choose)
             {
                 case (1):
                     Console.WriteLine("Min ve Maksimim Qiymmetleri daxil edin");
-                    Console.Write("Min qiymet: ");
-                    double min = Convert.ToDouble(Console.ReadLine());
-                    Console.Write("Max qiymet: ");
-                    double max = Convert.ToDouble(Console.ReadLine());
-                    foreach (var item in SelectiveValue(books, min, max))
+                    double min = GetInfoDouble("Min qiymet: ", 0, int.MaxValue);
+                    double max = GetInfoDouble("Max qiymet: ", 0,int.MaxValue);
+                    foreach (var item in SelectiveValue(Books, min, max))
                     {
                         Console.WriteLine(item.GetInfo());
                     }
                     break;
                 case (2):
                     string SearchedName = GetInfoString("Kitabin adini daxil edin: ", 3, 30);
-                    foreach (var item in SelectiveName(books, SearchedName))
+                    foreach (var item in SelectiveName(Books, SearchedName))
                     {
                         Console.WriteLine(item.GetInfo());
                     }
                     break;
                 case (3):
-                    for (int i = 0; i < books.Length; i++)
+                    for (int i = 0; i < Books.Length; i++)
                     {
                         Console.WriteLine("\n===============================\n" + $"{i + 1}. Kitab: ");
-                        Console.WriteLine(books[i].GetInfo());
+                        Console.WriteLine(Books[i].GetInfo());
                     }
                     break;
                 case (4):
@@ -138,6 +135,8 @@ namespace ConsoleApp1
                     count2++;
                 }
             }
+            if (books2.Length == 0)
+                Console.WriteLine("Axtardiginiz qiymetde kitab sistemde movcud deyil");
             return books2;
         }
         static Book[] SelectiveName(Book[] books, string SearchedName)
@@ -160,6 +159,8 @@ namespace ConsoleApp1
                     count2++;
                 }
             }
+            if(books2.Length == 0)
+                Console.WriteLine("\nAxtardiginiz adda kitab movcud deyil");
             return books2;
         }
         //Yazmadim cunki double deyerde daxil ede bilmedim. Hemde mene aid deyil :D 
